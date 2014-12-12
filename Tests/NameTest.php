@@ -1,6 +1,6 @@
 <?php
 require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__).'/../Name.php';
+require_once dirname(__FILE__) . '/../Name.php';
 
 class NameTest extends PHPUnit_Framework_TestCase {
 

@@ -1,7 +1,24 @@
 {
-  "name": "jasonpriem/human-name-parser",
+  "name": "elite50/human-name-parser",
   "description": "Takes human names of arbitrary complexity and various wacky formats and parses them out.",
+  "version" : "0.3-dev",
+  "keywords" : "name parser human break apart",
+  "license" : "GPL-3.0+",
+  "authors" : [
+    {
+      "name" : "George Yates III",
+      "email" : "me@georgeyatesiii.com",
+      "homepage" : "http://georgeyatesiii.com"
+    },
+    {
+      "name" : "Jason Priem",
+      "email" : "jason@jasonpriem.com",
+      "homepage" : "http://jasonpriem.com"
+    }
+  ],
   "autoload": {
-        "classmap": ["Name.php", "Parser.php"]
+    "psr-4": {
+      "Elite50\\HumanNameParser\\" : "src/"
+    }
   }
 }
