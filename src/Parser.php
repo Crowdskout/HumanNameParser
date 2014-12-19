@@ -43,10 +43,10 @@ class Parser {
 	{
 		if ($name) {
 
-			if (is_object($name) && get_class($name) == "HumanNameParser_Name") { // this is mostly for testing
+			if (is_object($name) && get_class($name) == 'Elite50\HumanNameParser\Name') { // this is mostly for testing
 				$this->name = $name;
 			} else {
-				$this->name = new HumanNameParser_Name($name);
+				$this->name = new Name($name);
 			}
 
 			$this->leadingInit = "";
