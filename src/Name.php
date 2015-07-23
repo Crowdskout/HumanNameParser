@@ -1,6 +1,8 @@
 <?php
 namespace Elite50\HumanNameParser;
 
+use Elite50\HumanNameParser\Exceptions\CannotParseException;
+use Elite50\HumanNameParser\Exceptions\InvalidStringException;
 use Exception;
 
 /**
@@ -8,65 +10,72 @@ use Exception;
  * Note that the string has to be UTF8-encoded.
  */
 class Name {
-	private $str;
+	private $string;
 
-	function __construct($str)
+	function __construct($string)
 	{
-		$this->setStr($str);
+		$this->setString($string);
 	}
 
 	/**
-	 * Checks encoding, normalizes whitespace/punctuation, and sets the name string.
+     * Set String.
+     *
+	 * Checks encoding, normalizes whitespace/punctuation, and sets the name string
 	 *
-	 * @param string $str a utf8-encoding string.
+	 * @param string $string a UTF8-encoded string
 	 *
 	 * @return bool True on success
 	 *
-	 * @throws Exception
+	 * @throws InvalidStringException
 	 */
-	public function setStr($str)
+	public function setString($string)
 	{
-		if (!mb_check_encoding($str)) {
-			throw new Exception("Name is not encoded in UTF-8");
+		if (!mb_check_encoding($string)) {
+			throw new InvalidStringException("Name is not encoded in UTF-8");
 		}
 
-		$this->str = $str;
+		$this->string = $string;
 		$this->norm();
 
 		return true;
 	}
 
-	public function getStr()
+    /**
+     * Get String.
+     *
+     * @return string
+     */
+	public function getString()
 	{
-		return $this->str;
+		return $this->string;
 	}
 
 
 	/**
-	 * Chop With Regex
+	 * Chop With Regex.
 	 *
-	 * Uses a regex to chop off and return part of the namestring
+	 * Uses a regex to chop off and return part of the name string
 	 * There are two parts: first, it returns the matched substring,
-	 * and then it removes that substring from $this->str and normalizes.
+	 * and then it removes that substring from $this->string and normalizes.
 	 *
-	 * @param string $regex matches the part of the namestring to chop off
+	 * @param string $regex matches the part of the name string to chop off
 	 * @param int $submatchIndex which of the parenthesized submatches to use
 	 * @param string $regexFlags optional regex flags
 	 *
-	 * @return string the part of the namestring that got chopped off
+	 * @return string the part of the name string that got chopped off
 	 *
-	 * @throws Exception
+	 * @throws CannotParseException
 	 */
 	public function chopWithRegex($regex, $submatchIndex = 0, $regexFlags = '')
 	{
 		$regex = $regex . "ui" . $regexFlags; // unicode + case-insensitive
-		preg_match($regex, $this->str, $m);
+		preg_match($regex, $this->string, $m);
 		$subset = (isset($m[$submatchIndex])) ? $m[$submatchIndex] : '';
 
 		if ($subset){
-			$this->str = preg_replace($regex, ' ', $this->str, -1, $numReplacements);
+			$this->string = preg_replace($regex, ' ', $this->string, -1, $numReplacements);
 			if ($numReplacements > 1){
-				throw new Exception("The regex being used to find the name has multiple matches.");
+				throw new CannotParseException("The regex being used to find the name has multiple matches.", $this->string);
 			}
 			$this->norm();
 			return $subset;
@@ -76,42 +85,46 @@ class Name {
 		}
 	}
 
-	/*
-    * Flips the front and back parts of a name with one another.
-    * Front and back are determined by a specified character somewhere in the
-    * middle of the string.
-    *
-    * @param	String $flipAroundChar	the character(s) demarcating the two halves you want to flip.
-    * @return Bool True on success.
-    *
-    * @throws Exception
-    */
+	/**
+	 * Flip.
+     *
+     * Flips the front and back parts of a name with one another
+     * Front and back are determined by a specified character somewhere in the
+     * middle of the string.
+     *
+     * @param  string $flipAroundChar The character(s) demarcating the two halves you want to flip.
+     * @return bool True on success.
+     *
+     * @throws CannotParseException
+     */
 	public function flip($flipAroundChar)
 	{
-		$substrings = preg_split("/$flipAroundChar/u", $this->str);
+		$subStrings = preg_split("/$flipAroundChar/u", $this->string);
 
-		if (count($substrings) == 2) {
-			$this->str = $substrings[1] . " " . $substrings[0];
+		if (count($subStrings) == 2) {
+			$this->string = $subStrings[1] . " " . $subStrings[0];
 			$this->norm();
-		} elseif (count($substrings) > 2) {
-			throw new Exception("Can't flip around multiple '$flipAroundChar' characters in namestring.");
+		} elseif (count($subStrings) > 2) {
+			throw new CannotParseException("Can't flip around multiple '$flipAroundChar' characters in name string.", $this->string);
 		}
 
 		return true; // if there's 1 or 0 $flipAroundChar found
 	}
 
 	/**
-	 * Removes extra whitespace and punctuation from $this->str
+     * Norm.
+     *
+	 * Removes extra whitespace and punctuation from $this->string
 	 * Strips whitespace chars from ends, strips redundant whitespace, converts whitespace chars to " ".
 	 *
-	 * @return Bool True on success
+	 * @return bool True on success
 	 */
 	private function norm()
 	{
-		$this->str = preg_replace( "#^\s*#u", "", $this->str );
-		$this->str = preg_replace( "#\s*$#u", "", $this->str );
-		$this->str = preg_replace( "#\s+#u", " ", $this->str );
-		$this->str = preg_replace( "#,$#u", " ", $this->str );
+		$this->string = preg_replace( "#^\s*#u", "", $this->string );
+		$this->string = preg_replace( "#\s*$#u", "", $this->string );
+		$this->string = preg_replace( "#\s+#u", " ", $this->string );
+		$this->string = preg_replace( "#,$#u", " ", $this->string );
 		return true;
 	}
 }

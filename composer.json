@@ -1,7 +1,7 @@
 {
   "name": "elite50/human-name-parser",
   "description": "Takes human names of arbitrary complexity and various wacky formats and parses them out.",
-  "version" : "0.3-dev",
+  "version" : "0.4-dev",
   "keywords" : ["name", "parser", "human", "break", "apart"],
   "license" : "GPL-3.0+",
   "authors" : [
