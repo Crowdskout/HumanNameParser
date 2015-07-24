@@ -3,7 +3,6 @@ namespace Elite50\HumanNameParser;
 
 use Elite50\HumanNameParser\Exceptions\CannotParseException;
 use Elite50\HumanNameParser\Exceptions\InvalidStringException;
-use Exception;
 
 /**
  * Does cutting and matching stuff with a name string.

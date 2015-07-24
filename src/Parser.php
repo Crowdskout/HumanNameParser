@@ -12,14 +12,41 @@ use Exception;
  *        //returns "Smith, John"
  */
 class Parser {
+    /**
+     * @var Name
+     */
 	private $name;
+    /**
+     * @var string
+     */
 	private $leadingInit;
+    /**
+     * @var string
+     */
 	private $first;
+    /**
+     * @var string
+     */
 	private $nicknames;
+    /**
+     * @var string
+     */
 	private $middle;
+    /**
+     * @var string
+     */
 	private $last;
+    /**
+     * @var string
+     */
 	private $suffix;
+    /**
+     * @var string
+     */
 	private $suffixes;
+    /**
+     * @var string
+     */
 	private $prefixes;
 
 	/**
@@ -165,7 +192,7 @@ class Parser {
 	 * Parse the name into its constituent parts.
 	 *
 	 * Sequentially captures each name-part, working in from the ends and
-	 * trimming the namestring as it goes.
+	 * trimming the name string as it goes.
 	 *
 	 * @return boolean	true on success
 	 *
@@ -179,7 +206,7 @@ class Parser {
 		/*
 		 * The regex use is a bit tricky.  *Everything* matched by the regex will be replaced,
 		 * but you can select a particular parenthesized submatch to be returned.
-		 * Also, note that each regex requres that the preceding ones have been run, and matches chopped out.
+		 * Also, note that each regex requires that the preceding ones have been run, and matches chopped out.
 		 */
 		$nicknamesRegex = "/ ('|\"|\(\"*'*)(.+?)('|\"|\"*'*\)) /"; // names that starts or end w/ an apostrophe break this
 		$suffixRegex = "/,* *($suffixes)$/";
@@ -211,8 +238,8 @@ class Parser {
 			$this->first = null;
 		}
 
-		// if anything's left, that's the middle name
-		$this->middle = $this->name->getStr();
+		// if anythings left, that's the middle name
+		$this->middle = $this->name->getString();
 		return true;
 	}
 }
