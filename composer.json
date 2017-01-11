@@ -1,5 +1,5 @@
 {
-  "name": "elite50/human-name-parser",
+  "name": "crowdskout/human-name-parser",
   "description": "Takes human names of arbitrary complexity and various wacky formats and parses them out.",
   "version" : "0.5-dev",
   "keywords" : ["name", "parser", "human", "break", "apart"],
